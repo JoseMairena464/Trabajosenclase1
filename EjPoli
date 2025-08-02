@@ -1,0 +1,164 @@
+using System;
+using System.Collections.Generic;
+
+namespace PilaresPOO
+{
+    //1. Notificaciones 
+    public class Notificacion
+    {
+        public virtual void Enviar()
+        {
+            Console.WriteLine("Enviando notificación genérica...");
+        }
+    }
+
+    public class NotificacionEmail : Notificacion
+    {
+        public override void Enviar()
+        {
+            Console.WriteLine("Enviando correo electrónico...");
+        }
+    }
+
+    public class NotificacionSMS : Notificacion
+    {
+        public override void Enviar()
+        {
+            Console.WriteLine("Enviando SMS...");
+        }
+    }
+
+    public class NotificacionPush : Notificacion
+    {
+        public override void Enviar()
+        {
+            Console.WriteLine("Enviando notificación push...");
+        }
+    }
+
+    // 2. Comandos de voz 
+    public abstract class ComandoVoz
+    {
+        public abstract void Ejecutar();
+    }
+
+    public class EncenderLuces : ComandoVoz
+    {
+        public override void Ejecutar()
+        {
+            Console.WriteLine("Luces encendidas.");
+        }
+    }
+
+    public class ReproducirMusica : ComandoVoz
+    {
+        public override void Ejecutar()
+        {
+            Console.WriteLine("Reproduciendo música.");
+        }
+    }
+
+    public class MostrarClima : ComandoVoz
+    {
+        public override void Ejecutar()
+        {
+            Console.WriteLine("El clima actual es soleado con 25°C.");
+        }
+    }
+
+    public static class AsistenteVoz
+    {
+        public static void EjecutarComandos(List<ComandoVoz> comandos)
+        {
+            foreach (var comando in comandos)
+            {
+                comando.Ejecutar();
+            }
+        }
+    }
+
+    // 3. Pagos
+    public abstract class Pago
+    {
+        public abstract void ProcesarPago();
+    }
+
+    public class PagoConTarjeta : Pago
+    {
+        public override void ProcesarPago()
+        {
+            Console.WriteLine("Procesando pago con tarjeta...");
+        }
+    }
+
+    public class PagoConEfectivo : Pago
+    {
+        public override void ProcesarPago()
+        {
+            Console.WriteLine("Recibiendo efectivo...");
+        }
+    }
+
+    public class PagoConTransferencia : Pago
+    {
+        public override void ProcesarPago()
+        {
+            Console.WriteLine("Iniciando transferencia bancaria...");
+        }
+    }
+
+    public static class CajaRegistradora
+    {
+        public static void ProcesarPagos(List<Pago> pagos)
+        {
+            foreach (var pago in pagos)
+            {
+                pago.ProcesarPago();
+            }
+        }
+    }
+
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Notificaciones
+            Console.WriteLine("Enviando notificaciones:");
+            var notificaciones = new List<Notificacion>
+            {
+                new NotificacionEmail(),
+                new NotificacionSMS(),
+                new NotificacionPush()
+            };
+            foreach (var n in notificaciones)
+            {
+                n.Enviar();
+            }
+
+            Console.WriteLine();
+
+            //Comandos de voz
+            Console.WriteLine("Ejecutando comandos de voz:");
+            var comandos = new List<ComandoVoz>
+            {
+                new EncenderLuces(),
+                new ReproducirMusica(),
+                new MostrarClima()
+            };
+            AsistenteVoz.EjecutarComandos(comandos);
+
+            Console.WriteLine();
+
+            // Pagos
+            Console.WriteLine("Procesando pagos:");
+            var pagos = new List<Pago>
+            {
+                new PagoConTarjeta(),
+                new PagoConEfectivo(),
+                new PagoConTransferencia()
+            };
+            CajaRegistradora.ProcesarPagos(pagos);
+        }
+    }
+}
