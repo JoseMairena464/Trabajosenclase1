@@ -1,0 +1,175 @@
+using System;
+using System.Collections.Generic;
+
+namespace MultimediaValidadoresDispositivos
+{
+    // Ejercicio 1: Clase abstracta ArchivoMultimedia
+    public abstract class ArchivoMultimedia
+    {
+        public string Titulo { get; set; }
+
+        public ArchivoMultimedia(string titulo)
+        {
+            Titulo = titulo;
+        }
+
+        public abstract void Reproducir();
+    }
+
+    public class Video : ArchivoMultimedia
+    {
+        public Video(string titulo) : base(titulo) { }
+
+        public override void Reproducir()
+        {
+            Console.WriteLine($" Reproduciendo video: {Titulo}");
+        }
+    }
+
+    public class Cancion : ArchivoMultimedia
+    {
+        public Cancion(string titulo) : base(titulo) { }
+
+        public override void Reproducir()
+        {
+            Console.WriteLine($" Reproduciendo canción: {Titulo}");
+        }
+    }
+
+    public class AudioLibro : ArchivoMultimedia
+    {
+        public AudioLibro(string titulo) : base(titulo) { }
+
+        public override void Reproducir()
+        {
+            Console.WriteLine($" Reproduciendo audiolibro: {Titulo}");
+        }
+    }
+
+    //  Ejercicio 2: Interfaz IValidador
+    public interface IValidador
+    {
+        bool EsValido(string dato);
+    }
+
+    public class ValidadorEmail : IValidador
+    {
+        public bool EsValido(string dato)
+        {
+            return dato.Contains("@") && dato.Contains(".");
+        }
+    }
+
+    public class ValidadorTelefono : IValidador
+    {
+        public bool EsValido(string dato)
+        {
+            return dato.Length == 8 && long.TryParse(dato, out _);
+        }
+    }
+
+    public class ValidadorDPI : IValidador
+    {
+        public bool EsValido(string dato)
+        {
+            return dato.Length == 13 && long.TryParse(dato, out _);
+        }
+    }
+
+    //  Ejercicio 3: Clase abstracta DispositivoSalida
+    public abstract class DispositivoSalida
+    {
+        public abstract void MostrarMensaje(string mensaje);
+    }
+
+    public class Pantalla : DispositivoSalida
+    {
+        public override void MostrarMensaje(string mensaje)
+        {
+            Console.WriteLine($" {mensaje}");
+        }
+    }
+
+    public class Proyector : DispositivoSalida
+    {
+        public override void MostrarMensaje(string mensaje)
+        {
+            Console.WriteLine($" Lanzando proyección: {mensaje}");
+        }
+    }
+
+    public class Impresora : DispositivoSalida
+    {
+        public override void MostrarMensaje(string mensaje)
+        {
+            Console.WriteLine($" Imprimiendo mensaje: {mensaje}");
+        }
+    }
+
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //  Ejercicio 1: Reproducción de archivos multimedia
+            Console.WriteLine(" Archivos multimedia:");
+            var archivos = new List<ArchivoMultimedia>
+            {
+                new Video("Documental sobre Guatemala"),
+                new Cancion("Luna de Xelajú"),
+                new AudioLibro("Popol Vuh")
+            };
+            foreach (var archivo in archivos)
+            {
+                archivo.Reproducir();
+            }
+
+            Console.WriteLine();
+
+            //  Ejercicio 2: Validadores
+            Console.WriteLine(" Validación de datos:");
+            var validadores = new List<IValidador>
+            {
+                new ValidadorEmail(),
+                new ValidadorTelefono(),
+                new ValidadorDPI()
+            };
+
+            var datos = new List<string>
+            {
+                "usuario@example.com",
+                "12345678",
+                "1234567890123",
+                "correoSinArroba.com",
+                "1234",
+                "abc1234567890"
+            };
+
+            foreach (var dato in datos)
+            {
+                Console.WriteLine($"\n Validando: {dato}");
+                foreach (var validador in validadores)
+                {
+                    bool resultado = validador.EsValido(dato);
+                    Console.WriteLine($"→ {validador.GetType().Name}: {(resultado ? "Válido" : "Inválido")}");
+                }
+            }
+
+            Console.WriteLine();
+
+            // Ejercicio 3: Dispositivos de salida
+            Console.WriteLine(" Dispositivos de salida:");
+            var dispositivos = new List<DispositivoSalida>
+            {
+                new Pantalla(),
+                new Proyector(),
+                new Impresora()
+            };
+
+            foreach (var dispositivo in dispositivos)
+            {
+                dispositivo.MostrarMensaje("Bienvenido al sistema multimedia.");
+            }
+        }
+    }
+}
