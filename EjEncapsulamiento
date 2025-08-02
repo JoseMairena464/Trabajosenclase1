@@ -1,0 +1,159 @@
+using System;
+
+namespace ProyectoValidaciones
+{
+    // 1. Clase Empleado con validaciones
+    public class Empleado
+    {
+        private string nombre;
+        private decimal salario;
+
+        public string Nombre
+        {
+            get => nombre;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("El nombre no puede estar en blanco.");
+                nombre = value;
+            }
+        }
+
+        public decimal Salario
+        {
+            get => salario;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("El salario no puede ser negativo.");
+                salario = value;
+            }
+        }
+
+        public Empleado(string nombre, decimal salario)
+        {
+            Nombre = nombre;
+            Salario = salario;
+        }
+
+        public void MostrarDatos()
+        {
+            Console.WriteLine($"Empleado: {Nombre}, Salario: {Salario:C}");
+        }
+    }
+
+    // 2. Clase CuentaBancaria con límite de retiro
+    public class CuentaBancaria
+    {
+        private decimal saldo;
+        private decimal limiteDiario;
+
+        public CuentaBancaria(decimal saldoInicial, decimal limiteDiario)
+        {
+            saldo = saldoInicial;
+            this.limiteDiario = limiteDiario;
+        }
+
+        public void Depositar(decimal monto)
+        {
+            saldo += monto;
+            Console.WriteLine($"Se depositaron {monto:C}. Saldo actual: {saldo:C}");
+        }
+
+        public void Retirar(decimal monto)
+        {
+            if (monto > limiteDiario)
+            {
+                Console.WriteLine($"Error: El monto excede el límite diario de {limiteDiario:C}.");
+                return;
+            }
+
+            if (monto > saldo)
+            {
+                Console.WriteLine("Error: Fondos insuficientes.");
+                return;
+            }
+
+            saldo -= monto;
+            Console.WriteLine($"Se retiraron {monto:C}. Saldo restante: {saldo:C}");
+        }
+
+        public void MostrarSaldo()
+        {
+            Console.WriteLine($"Saldo disponible: {saldo:C}");
+        }
+    }
+
+    // 3. Clase Vehiculo con control de encendido
+    public class Vehiculo
+    {
+        private bool encendido;
+
+        public bool Encendido => encendido;
+
+        public void Encender()
+        {
+            if (!encendido)
+            {
+                encendido = true;
+                Console.WriteLine("Vehículo encendido.");
+            }
+            else
+            {
+                Console.WriteLine("El vehículo ya está encendido.");
+            }
+        }
+
+        public void Apagar()
+        {
+            if (encendido)
+            {
+                encendido = false;
+                Console.WriteLine("Vehículo apagado.");
+            }
+            else
+            {
+                Console.WriteLine("El vehículo ya está apagado.");
+            }
+        }
+    }
+
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Empleado con validaciones
+            try
+            {
+                var empleado = new Empleado("Carlos", 3500);
+                empleado.MostrarDatos();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al crear empleado: {ex.Message}");
+            }
+
+            Console.WriteLine();
+
+            // Cuenta bancaria con límite de retiro
+            var cuenta = new CuentaBancaria(1000, 500);
+            cuenta.Depositar(200);
+            cuenta.Retirar(600); // Excede límite
+            cuenta.Retirar(300); // Válido
+            cuenta.MostrarSaldo();
+
+            Console.WriteLine();
+
+            // Vehículo con control de encendido
+            var vehiculo = new Vehiculo();
+            vehiculo.Encender();
+            Console.WriteLine($"¿Está encendido? {vehiculo.Encendido}");
+            vehiculo.Apagar();
+            Console.WriteLine($"¿Está encendido? {vehiculo.Encendido}");
+        }
+    }
+}
+
+
+
