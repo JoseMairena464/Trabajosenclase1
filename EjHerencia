@@ -1,0 +1,152 @@
+using System;
+
+namespace ProyectoConsola
+{
+    //Empleado base
+    public class Empleado
+    {
+        public string Nombre { get; set; }
+        public decimal Salario { get; set; }
+
+        public Empleado(string nombre, decimal salario)
+        {
+            Nombre = nombre;
+            Salario = salario;
+        }
+    }
+
+    //Gerente
+    public class Gerente : Empleado
+    {
+        public Gerente(string nombre, decimal salario) : base(nombre, salario) { }
+
+        public void TomarDecision()
+        {
+            Console.WriteLine($"{Nombre} ha tomado una decisión estratégica.");
+        }
+    }
+
+    //Desarrollador
+    public class Desarrollador : Empleado
+    {
+        public Desarrollador(string nombre, decimal salario) : base(nombre, salario) { }
+
+        public void Programar()
+        {
+            Console.WriteLine($"{Nombre} está programando una nueva funcionalidad.");
+        }
+    }
+
+    //Vehículo base
+    public class Vehiculo
+    {
+        public string Modelo { get; set; }
+
+        public Vehiculo(string modelo)
+        {
+            Modelo = modelo;
+        }
+
+        public void Avanzar()
+        {
+            Console.WriteLine($"{Modelo} está avanzando.");
+        }
+    }
+
+    //Auto
+    public class Auto : Vehiculo
+    {
+        public Auto(string modelo) : base(modelo) { }
+
+        public void EncenderRadio()
+        {
+            Console.WriteLine($"{Modelo} ha encendido la radio.");
+        }
+    }
+
+    // Motocicleta
+    public class Motocicleta : Vehiculo
+    {
+        public Motocicleta(string modelo) : base(modelo) { }
+
+        public void HacerCaballito()
+        {
+            Console.WriteLine($"{Modelo} está haciendo un caballito.");
+        }
+    }
+
+    // Cuenta base
+    public class Cuenta
+    {
+        public decimal Saldo { get; protected set; }
+
+        public void Depositar(decimal monto)
+        {
+            Saldo += monto;
+            Console.WriteLine($"Se depositaron {monto:C}. Saldo actual: {Saldo:C}");
+        }
+
+        public virtual void CalcularIntereses()
+        {
+            Console.WriteLine("Intereses base calculados.");
+        }
+    }
+
+    // Cuenta de Ahorro
+    public class CuentaAhorro : Cuenta
+    {
+        public override void CalcularIntereses()
+        {
+            decimal interes = Saldo * 0.03m;
+            Saldo += interes;
+            Console.WriteLine($"Intereses de ahorro: {interes:C}. Nuevo saldo: {Saldo:C}");
+        }
+    }
+
+    // Cuenta Corriente
+    public class CuentaCorriente : Cuenta
+    {
+        public override void CalcularIntereses()
+        {
+            decimal interes = Saldo * 0.01m;
+            Saldo += interes;
+            Console.WriteLine($"Intereses de cuenta corriente: {interes:C}. Nuevo saldo: {Saldo:C}");
+        }
+    }
+
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Empleados
+            var gerente = new Gerente("Ana", 5000);
+            gerente.TomarDecision();
+
+            var dev = new Desarrollador("Luis", 4000);
+            dev.Programar();
+
+            Console.WriteLine();
+
+            // Vehículos
+            var auto = new Auto("Toyota Corolla");
+            auto.Avanzar();
+            auto.EncenderRadio();
+
+            var moto = new Motocicleta("Yamaha R1");
+            moto.Avanzar();
+            moto.HacerCaballito();
+
+            Console.WriteLine();
+
+            // Cuentas
+            var ahorro = new CuentaAhorro();
+            ahorro.Depositar(1000);
+            ahorro.CalcularIntereses();
+
+            var corriente = new CuentaCorriente();
+            corriente.Depositar(1000);
+            corriente.CalcularIntereses();
+        }
+    }
+}
